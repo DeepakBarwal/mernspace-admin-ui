@@ -40,6 +40,14 @@ export default function LoginPage() {
     enabled: false,
   });
 
+  const { mutate: logoutMutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: logout,
+    onSuccess: async () => {
+      logoutFromStore();
+    },
+  });
+
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
@@ -50,8 +58,7 @@ export default function LoginPage() {
 
       // login or redirect to client UI/logout depending on role
       if (!isAllowed(selfData)) {
-        await logout();
-        logoutFromStore();
+        logoutMutate();
         return;
       }
 
