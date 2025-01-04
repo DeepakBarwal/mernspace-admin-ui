@@ -11,9 +11,9 @@ import {
 } from "antd";
 import { LockFilled, LockOutlined, UserOutlined } from "@ant-design/icons";
 import Logo from "../../components/icons/Logo";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Credentials } from "../../types";
-import { login } from "../../http/api";
+import { login, self } from "../../http/api";
 
 const loginUser = async (credentials: Credentials) => {
   // server call logic
@@ -21,14 +21,28 @@ const loginUser = async (credentials: Credentials) => {
   return data;
 };
 
+const getSelf = async () => {
+  // server call logic
+  const { data } = await self();
+  return data;
+};
+
 export default function LoginPage() {
-  console.log(import.meta.env.VITE_BACKEND_API_URL);
+  const { refetch } = useQuery({
+    queryKey: ["self"],
+    queryFn: getSelf,
+    enabled: false,
+  });
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
       console.log("Login Successful.");
+      // getself
+      const { data: selfData } = await refetch();
+      // store in the state
+      console.log(selfData);
     },
   });
 
@@ -74,7 +88,6 @@ export default function LoginPage() {
               initialValues={{ remember: true }}
               onFinish={(values) => {
                 mutate({ email: values.username, password: values.password });
-                console.log(values);
               }}
             >
               {isError && (
