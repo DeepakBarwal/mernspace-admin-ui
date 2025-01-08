@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "../../http/api";
 import { User } from "../../types";
 import { useAuthStore } from "../../store";
+import UsersFilters from "./UsersFilters";
 
 const columns = [
   {
@@ -61,6 +62,8 @@ export default function Users() {
         />
         {isLoading && <div>Loading...</div>}
         {isError && <div>{error.message}</div>}
+
+        <UsersFilters />
 
         <Table columns={columns} dataSource={users} />
       </Space>
