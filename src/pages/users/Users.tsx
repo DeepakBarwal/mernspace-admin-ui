@@ -63,9 +63,13 @@ export default function Users() {
         {isLoading && <div>Loading...</div>}
         {isError && <div>{error.message}</div>}
 
-        <UsersFilters />
+        <UsersFilters
+          onFilterChange={(filterName, filterValue) => {
+            console.log(filterName, filterValue);
+          }}
+        />
 
-        <Table columns={columns} dataSource={users} />
+        <Table columns={columns} dataSource={users} rowKey={"id"} />
       </Space>
     </>
   );
