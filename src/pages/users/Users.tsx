@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcrumb, Button, Drawer, Space, Table } from "antd";
+import { Breadcrumb, Button, Drawer, Form, Space, Table, theme } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 import { Link, Navigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import { User } from "../../types";
 import { useAuthStore } from "../../store";
 import UsersFilters from "./UsersFilters";
 import { PlusOutlined } from "@ant-design/icons";
+import UserForm from "./forms/UserForm";
 
 const columns = [
   {
@@ -38,6 +39,9 @@ const columns = [
 ];
 
 export default function Users() {
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const {
     data: users,
@@ -96,8 +100,15 @@ export default function Users() {
               <Button type="primary">Submit</Button>
             </Space>
           }
+          styles={{
+            body: {
+              background: colorBgLayout,
+            },
+          }}
         >
-          <p>aaaa</p>
+          <Form layout="vertical">
+            <UserForm />
+          </Form>
         </Drawer>
       </Space>
     </>
