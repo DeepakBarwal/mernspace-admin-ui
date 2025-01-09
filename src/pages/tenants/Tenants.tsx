@@ -52,7 +52,9 @@ const Tenants = () => {
     error,
   } = useQuery({
     queryKey: ["tenants"],
-    queryFn: getTenants,
+    queryFn: () => {
+      return getTenants().then((res) => res.data);
+    },
   });
 
   const { user } = useAuthStore();
@@ -92,7 +94,7 @@ const Tenants = () => {
           </Button>
         </TenantFilter>
 
-        <Table columns={columns} dataSource={tenants?.data} rowKey={"id"} />
+        <Table columns={columns} dataSource={tenants} rowKey={"id"} />
 
         <Drawer
           title="Create restaurant"
