@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Breadcrumb,
   Button,
@@ -26,6 +26,7 @@ import UsersFilters from "./UsersFilters";
 import { PlusOutlined } from "@ant-design/icons";
 import UserForm from "./forms/UserForm";
 import { PER_PAGE } from "../../constants";
+import { debounce } from "lodash";
 
 const columns = [
   {
@@ -108,6 +109,12 @@ export default function Users() {
     setDrawerOpen(false);
   };
 
+  const debouncedQUpdate = useMemo(() => {
+    return debounce((value: string | undefined) => {
+      setQueryParams((prev) => ({ ...prev, q: value }));
+    }, 1000);
+  }, []);
+
   const onFilterChange = (changedFields: FieldData[]) => {
     const changedFilterFields = changedFields
       .map((item) => ({
@@ -115,7 +122,11 @@ export default function Users() {
       }))
       .reduce((acc, item) => ({ ...acc, ...item }), {});
 
-    setQueryParams((prev) => ({ ...prev, ...changedFilterFields }));
+    if ("q" in changedFilterFields) {
+      debouncedQUpdate(changedFilterFields?.q);
+    } else {
+      setQueryParams((prev) => ({ ...prev, ...changedFilterFields }));
+    }
   };
 
   const { user } = useAuthStore();
