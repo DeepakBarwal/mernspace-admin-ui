@@ -7,7 +7,8 @@ export default function UserForm() {
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
     queryFn: () => {
-      return getTenants().then((res) => res.data);
+      // TODO: make this dynamic, like search for tenants in the input
+      return getTenants(`perPage=100&currentPage=1`).then((res) => res.data);
     },
   });
 
