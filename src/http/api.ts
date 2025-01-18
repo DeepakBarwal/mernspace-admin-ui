@@ -13,6 +13,7 @@ export const getUsers = (queryString: string) =>
 export const createUser = (user: CreateUserData) => api.post("/users", user);
 
 // Tenant service
-export const getTenants = () => api.get("/tenants");
+export const getTenants = (queryString: string) =>
+  api.get(`/tenants?${queryString}`);
 export const createTenant = (tenant: CreateTenantData) =>
   api.post("/tenants", tenant);
