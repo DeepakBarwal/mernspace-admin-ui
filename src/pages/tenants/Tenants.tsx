@@ -106,7 +106,7 @@ const Tenants = () => {
 
   const debouncedQUpdate = React.useMemo(() => {
     return debounce((value: string | undefined) => {
-      setQueryParams((prev) => ({ ...prev, q: value }));
+      setQueryParams((prev) => ({ ...prev, q: value, currentPage: 1 }));
     }, 500);
   }, []);
 
@@ -120,7 +120,11 @@ const Tenants = () => {
     if ("q" in changedFilterFields) {
       debouncedQUpdate(changedFilterFields.q);
     } else {
-      setQueryParams((prev) => ({ ...prev, ...changedFilterFields }));
+      setQueryParams((prev) => ({
+        ...prev,
+        ...changedFilterFields,
+        currentPage: 1,
+      }));
     }
   };
 
@@ -177,6 +181,9 @@ const Tenants = () => {
                   currentPage: page,
                 };
               });
+            },
+            showTotal: (total: number, range: number[]) => {
+              return `Showing ${range[0]}-${range[1]} of ${total} items`;
             },
           }}
         />
