@@ -97,9 +97,10 @@ export default function Dashboard() {
           <div className="logo">
             <Logo />
           </div>
+
           <Menu
             theme="light"
-            defaultSelectedKeys={["/"]}
+            defaultSelectedKeys={[location.pathname]}
             mode="inline"
             items={items}
           />
