@@ -3,7 +3,11 @@ import { getTenants } from "../../../http/api";
 import { useQuery } from "@tanstack/react-query";
 import { Tenant } from "../../../types";
 
-export default function UserForm() {
+export default function UserForm({
+  isEditMode = false,
+}: {
+  isEditMode: boolean;
+}) {
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
     queryFn: () => {
@@ -67,24 +71,26 @@ export default function UserForm() {
             </Row>
           </Card>
 
-          <Card title="Security Info">
-            <Row gutter={20}>
-              <Col span={12}>
-                <Form.Item
-                  label="Password"
-                  name={"password"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Password is required",
-                    },
-                  ]}
-                >
-                  <Input.Password size="large" />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
+          {!isEditMode && (
+            <Card title="Security Info">
+              <Row gutter={20}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Password"
+                    name={"password"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Password is required",
+                      },
+                    ]}
+                  >
+                    <Input.Password size="large" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
+          )}
 
           <Card title="Role">
             <Row gutter={20}>
@@ -100,6 +106,7 @@ export default function UserForm() {
                   ]}
                 >
                   <Select
+                    id="selectBoxInUserForm"
                     size="large"
                     allowClear={true}
                     placeholder={"Select Role"}
@@ -109,7 +116,6 @@ export default function UserForm() {
                       { value: "manager", label: "Manager" },
                       { value: "customer", label: "Customer" },
                     ]}
-                    onChange={() => {}}
                   />
                 </Form.Item>
               </Col>
@@ -129,11 +135,10 @@ export default function UserForm() {
                     allowClear={true}
                     placeholder={"Select Restaurant"}
                     style={{ width: "100%" }}
-                    options={tenants?.map((tenant: Tenant) => ({
+                    options={tenants?.data?.map((tenant: Tenant) => ({
                       value: tenant?.id,
                       label: tenant?.name,
                     }))}
-                    onChange={() => {}}
                   />
                 </Form.Item>
               </Col>
