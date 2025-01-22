@@ -22,7 +22,7 @@ export type CreateUserData = {
 };
 
 export type Tenant = {
-  id: number;
+  id: string;
   name: string;
   address: string;
 };
@@ -30,6 +30,10 @@ export type Tenant = {
 export type CreateTenantData = {
   name: string;
   address: string;
+};
+
+export type UpdateTenantData = {
+  id: number;
 };
 
 export type FieldData = {
