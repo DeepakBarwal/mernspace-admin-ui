@@ -8,6 +8,8 @@ export default function UserForm({
 }: {
   isEditMode: boolean;
 }) {
+  const selectedRole = Form.useWatch("role");
+
   const { data: tenants } = useQuery({
     queryKey: ["tenants"],
     queryFn: () => {
@@ -114,34 +116,36 @@ export default function UserForm({
                     options={[
                       { value: "admin", label: "Admin" },
                       { value: "manager", label: "Manager" },
-                      { value: "customer", label: "Customer" },
                     ]}
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Restaurant"
-                  name={"tenantId"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Restaurant is required",
-                    },
-                  ]}
-                >
-                  <Select
-                    size="large"
-                    allowClear={true}
-                    placeholder={"Select Restaurant"}
-                    style={{ width: "100%" }}
-                    options={tenants?.data?.map((tenant: Tenant) => ({
-                      value: tenant?.id,
-                      label: tenant?.name,
-                    }))}
-                  />
-                </Form.Item>
-              </Col>
+
+              {selectedRole === "manager" && (
+                <Col span={12}>
+                  <Form.Item
+                    label="Restaurant"
+                    name={"tenantId"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Restaurant is required",
+                      },
+                    ]}
+                  >
+                    <Select
+                      size="large"
+                      allowClear={true}
+                      placeholder={"Select Restaurant"}
+                      style={{ width: "100%" }}
+                      options={tenants?.data?.map((tenant: Tenant) => ({
+                        value: tenant?.id,
+                        label: tenant?.name,
+                      }))}
+                    />
+                  </Form.Item>
+                </Col>
+              )}
             </Row>
           </Card>
         </Space>
